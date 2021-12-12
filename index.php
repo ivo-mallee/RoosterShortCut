@@ -5,14 +5,18 @@ parse_str($_SERVER['QUERY_STRING'], $queries);
 @$selectedClass = $queries['Class'];
 $ShortCut = array_key_exists('Class',$queries);
 
-$currentWeekNumber = date('W');
+$currentWeekNumber = date('W')+1;
 echo "Weeknummer: $currentWeekNumber <br>";
 $username = "ICT";
 $password = "!135m3n";
 $i = 10;
 while (true) {
-if (!$ShortCut) {$remote_url = "https://roosters.rocmondriaan.nl/ict/student/P2/$currentWeekNumber/c/c000$i.htm";}
-if ($ShortCut) {$remote_url = "https://roosters.rocmondriaan.nl/ict/student/P2/$currentWeekNumber/c/c000$selectedClass.htm";}
+for ($WeekAddition =0; $WeekAddition <2; $WeekAddition++) {
+
+
+
+if (!$ShortCut) {$remote_url = "https://roosters.rocmondriaan.nl/ict/student/P2/".$currentWeekNumber+$WeekAddition."/c/c000$i.htm";}
+if ($ShortCut) {$remote_url = "https://roosters.rocmondriaan.nl/ict/student/P2/".$currentWeekNumber+$WeekAddition."/c/c000$selectedClass.htm";}
 
   // Create a stream
 $opts = array(
@@ -21,6 +25,7 @@ $opts = array(
     'header' => "Authorization: Basic " . base64_encode("$username:$password")                 
   )
 );
+
 
 $context = stream_context_create($opts);
 
@@ -33,8 +38,11 @@ $context = stream_context_create($opts);
 if (str_contains($file, "TD") && !$ShortCut) {echo "<a href='?Class=$i'>Create $class Shortcut</a>";}
 if (str_contains($file, "TD")) {echo "$file <br><br><br><br><br>";}
 if (!$file) {break; echo "ERROR!";}
+}
 $i++;
+
 if ($ShortCut) {break;}
+
 }
 
 
